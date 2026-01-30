@@ -58,9 +58,48 @@ public class Deck
         }
     }
 
+    /// <summary>
+    /// Randomizes the order of the cards in the deck using the Fisher-Yates algorithm.
+    /// </summary>
+    /// <param name="times">The number of times to perform the shuffle pass. Must be &gt;= 1. Default is 1.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="times"/> is less than 1.</exception>
+    /// <remarks>
+    /// The method:
+    /// - Validates the <paramref name="times"/> argument.
+    /// - Copies the internal stack to a list to allow efficient indexed swaps.
+    /// - Performs the Fisher-Yates shuffle the specified number of times. Repeating the shuffle
+    ///   increases randomness but has linear cost per pass (O(n)).
+    /// - Rebuilds the internal stack so that the first element of the shuffled list becomes the next
+    ///   card returned by <see cref="NextCard"/>.
+    /// Uses <see cref="Random.Shared"/> for a thread-safe random number generator.
+    /// </remarks>
     public void Shuffle(int times = 1)
     {
+        if (times < 1)
+            throw new ArgumentOutOfRangeException(nameof(times), "times must be >= 1");
 
+        var rng = Random.Shared;
+
+        var lstCards = _stackOfCards.ToList();
+
+        // Fisher-Yates shuffle performed 'times' times.
+        for (int t = 0; t < times; t++)
+        {
+            for (int i = lstCards.Count - 1; i > 0; i--)
+            {
+                int j = rng.Next(i + 1);
+                var temp = lstCards[i];
+                lstCards[i] = lstCards[j];
+                lstCards[j] = temp;
+            }
+        }
+
+        // Rebuild the stack so that list[0] becomes the next popped card.
+        _stackOfCards.Clear();
+
+        for (int i = lstCards.Count - 1; i >= 0; i--)
+        {
+            _stackOfCards.Push(lstCards[i]);
+        }
     }
-
 }
