@@ -22,3 +22,14 @@ class TestDeckMethods(unittest.TestCase):
 if __name__ == '__main__':
     # Execute tests by running "python -m unittest" from parent directory
     unittest.main()
+
+
+
+def test_fisher_yates_preserves_cards():
+    deck = Deck.new_deck()
+    original_cards = set(deck._stack)
+
+    deck.shuffle()
+
+    assert len(deck._stack) == 52
+    assert set(deck._stack) == original_cards

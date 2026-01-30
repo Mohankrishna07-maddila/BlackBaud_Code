@@ -29,6 +29,9 @@ class Deck:
     def empty(self) -> bool:
         """Returns true if there are no remaining cards in the deck"""
         return self.remaining_cards == 0
+    # @property
+    # def shuffle(self):
+    #     return self.shuffle
 
     def next_card(self) -> Card:
         """
