@@ -58,4 +58,9 @@ public class Deck
         }
     }
 
+    public void Shuffle(int times = 1)
+    {
+
+    }
+
 }
